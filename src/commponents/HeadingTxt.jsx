@@ -9,3 +9,4 @@
 function HeadingText({ title = 'Default Heading' }) {
   return <h1 className="heading-text">{title}</h1>;
 }
+export default HeadingText;

@@ -6,9 +6,9 @@
  * @returns {React.ReactElement} A React element displaying the user's profile information
  */
 import React, { useState } from 'react';
-import CarCard from './CarCard';
+import CarCard from './CarCardContainer';
 
-const App = () => {
+const ProfileCard = () => {
   const drivers = [
     {
       name: 'Lewis Hamilton',
@@ -48,35 +48,45 @@ const App = () => {
   const [selectedDriver, setSelectedDriver] = useState(null);
 
   const handleDriverClick = (driver) => {
+    if (!driver) {
+      throw new Error('Driver is null or undefined');
+    }
     setSelectedDriver(driver);
+  };
+
+  const renderDriverCard = (driver, index) => {
+    if (!driver) {
+      return null;
+    }
+    return (
+      <div
+        key={index}
+        className="driver-card"
+        style={{
+          backgroundColor: selectedDriver?.car?.favouriteColor,
+        }}
+        onClick={() => handleDriverClick(driver)}
+      >
+        <h2>{driver.name.toUpperCase()}</h2>
+        <p>Birth Year: {driver.birthYear}</p>
+        <p>Total Characters: {driver.name.length}</p>
+        <CarCard
+          imageUrl={`https://example.com/${driver.car.make.toLowerCase()}.jpg`}
+          name={driver.car.model}
+          description={`This is the ${driver.car.make} ${driver.car.model}.`}
+          engineSize={driver.car.engineSize}
+          color={driver.car.color}
+        />
+      </div>
+    );
   };
 
   return (
     <div>
       <h1>Race Car Drivers</h1>
-      {drivers.map((driver, index) => (
-        <div
-          key={index}
-          className="driver-card"
-          style={{
-            backgroundColor: selectedDriver?.car?.favouriteColor,
-          }}
-          onClick={() => handleDriverClick(driver)}
-        >
-          <h2>{driver.name.toUpperCase()}</h2>
-          <p>Birth Year: {driver.birthYear}</p>
-          <p>Total Characters: {driver.name.length}</p>
-          <CarCard
-            imageUrl={`https://example.com/${driver.car.make.toLowerCase()}.jpg`}
-            name={driver.car.model}
-            description={`This is the ${driver.car.make} ${driver.car.model}.`}
-            engineSize={driver.car.engineSize}
-            color={driver.car.color}
-          />
-        </div>
-      ))}
+      {drivers.map((driver, index) => renderDriverCard(driver, index))}
     </div>
   );
 };
 
-export default App;
+export default ProfileCard;
