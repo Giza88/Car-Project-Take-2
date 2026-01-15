@@ -6,7 +6,7 @@
  * @returns {React.ReactElement} A React element displaying the user's profile information
  */
 import React, { useState } from 'react';
-import CarCard from './CarCardContainer';
+import CarCard from './CarCard.jsx';
 
 const ProfileCard = () => {
   const drivers = [
@@ -45,46 +45,61 @@ const ProfileCard = () => {
     },
   ];
 
-  const [selectedDriver, setSelectedDriver] = useState(null);
+  const [flippedIndex, setFlippedIndex] = useState(null);
 
-  const handleDriverClick = (driver) => {
-    if (!driver) {
-      throw new Error('Driver is null or undefined');
-    }
-    setSelectedDriver(driver);
+  const toggleFlip = (index) => {
+    setFlippedIndex((current) => (current === index ? null : index));
   };
 
   const renderDriverCard = (driver, index) => {
     if (!driver) {
       return null;
     }
+
+    const isFlipped = flippedIndex === index;
+    const cardImageUrl = `https://placehold.co/420x240?text=${encodeURIComponent(
+      `${driver.car.make} ${driver.car.model}`
+    )}`;
+
     return (
-      <div
-        key={index}
-        className="driver-card"
-        style={{
-          backgroundColor: selectedDriver?.car?.favouriteColor,
-        }}
-        onClick={() => handleDriverClick(driver)}
-      >
-        <h2>{driver.name.toUpperCase()}</h2>
-        <p>Birth Year: {driver.birthYear}</p>
-        <p>Total Characters: {driver.name.length}</p>
-        <CarCard
-          imageUrl={`https://example.com/${driver.car.make.toLowerCase()}.jpg`}
-          name={driver.car.model}
-          description={`This is the ${driver.car.make} ${driver.car.model}.`}
-          engineSize={driver.car.engineSize}
-          color={driver.car.color}
-        />
+      <div key={index} className="driver-card">
+        <div
+          className={`flip-card${isFlipped ? ' is-flipped' : ''}`}
+          onClick={() => toggleFlip(index)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              toggleFlip(index);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-pressed={isFlipped}
+          style={{ borderColor: driver.car.favouriteColor }}
+        >
+          <div className="flip-card-inner">
+            <div className="flip-card-front">
+              <h2>{driver.name}</h2>
+              <p>Birth Year: {driver.birthYear}</p>
+              <p>Team: {driver.car.make}</p>
+              <p>Favourite Color: {driver.car.favouriteColor}</p>
+              <p className="hint-text">Click to see the race car</p>
+            </div>
+            <div className="flip-card-back">
+              <CarCard car={driver.car} imageUrl={cardImageUrl} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   };
 
   return (
-    <div>
+    <div className="profile-card">
       <h1>Race Car Drivers</h1>
-      {drivers.map((driver, index) => renderDriverCard(driver, index))}
+      <div className="driver-grid">
+        {drivers.map((driver, index) => renderDriverCard(driver, index))}
+      </div>
     </div>
   );
 };

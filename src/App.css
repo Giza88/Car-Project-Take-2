@@ -40,3 +40,87 @@
 .read-the-docs {
   color: #888;
 }
+
+.app-shell {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-card {
+  width: 100%;
+}
+
+.driver-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.driver-card {
+  display: flex;
+  justify-content: center;
+}
+
+.flip-card {
+  background: transparent;
+  width: 100%;
+  max-width: 320px;
+  height: 360px;
+  perspective: 1000px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 16px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+.flip-card.is-flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #1f2937;
+  color: #f9fafb;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.flip-card-front h2 {
+  margin-bottom: 0.5rem;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+.hint-text {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #cbd5f5;
+}
+
+.car-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+}
